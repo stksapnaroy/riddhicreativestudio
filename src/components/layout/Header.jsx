@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight, Sparkles, Phone, Mail } from 'lucide-react';
 import { studioInfo } from '../../data/companyData';
 
-export default function Header({ onOpenQuote, activeSection = "home" }) {
+export default function Header({ onOpenQuote, onOpenClientPortal, onOpenAdminPortal, activeSection = "home" }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -90,6 +90,19 @@ export default function Header({ onOpenQuote, activeSection = "home" }) {
 
             {/* Right Side: CTA Button & Mobile Hamburger */}
             <div className="flex items-center gap-3">
+              <button
+                onClick={onOpenClientPortal}
+                className="hidden lg:inline-flex px-3 py-2 text-xs font-semibold text-neutral-700 hover:text-[#2546FF]"
+              >
+                My Portal
+              </button>
+              <button
+                onClick={onOpenAdminPortal}
+                className="hidden xl:inline-flex px-2 py-2 text-[10px] font-mono text-neutral-400 hover:text-neutral-900"
+                title="Studio admin"
+              >
+                Admin
+              </button>
               <button
                 onClick={onOpenQuote}
                 className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#0D0E11] text-white hover:bg-[#2546FF] shadow-sm hover:shadow-md transition-all duration-300 group"

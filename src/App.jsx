@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Hero from './components/hero/Hero';
@@ -15,6 +15,13 @@ import ContactSection from './components/sections/ContactSection';
 import ProjectModal from './components/modals/ProjectModal';
 import QuoteDrawer from './components/modals/QuoteDrawer';
 import FontSwitcher from './components/ui/FontSwitcher';
+import QuickRequirementBar from './components/sections/QuickRequirementBar';
+import ClientPortalModal from './components/portals/ClientPortalModal';
+import InvoiceModal from './components/portals/InvoiceModal';
+import AdminPortalModal from './components/portals/AdminPortalModal';
+import AuthModal from './components/auth/AuthModal';
+import { getSessionProfile } from './services/portalApi';
+import { supabase } from './lib/supabase';
 import { portfolioData } from './data/portfolioData';
 
 export default function App() {
@@ -22,6 +29,26 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [prefilledService, setPrefilledService] = useState("");
+  const [isClientPortalOpen, setIsClientPortalOpen] = useState(false);
+  const [isAdminPortalOpen, setIsAdminPortalOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [session, setSession] = useState({ user: null, profile: null });
+
+  useEffect(() => {
+    if (!supabase) return;
+    const refresh = () => getSessionProfile().then(setSession).catch(() => setSession({ user: null, profile: null }));
+    refresh();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => refresh());
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const openClientPortal = () => session.user ? setIsClientPortalOpen(true) : setIsAuthOpen(true);
+  const openAdminPortal = () => session.profile?.role === 'admin' ? setIsAdminPortalOpen(true) : setIsAuthOpen(true);
+
+  const scrollToRequirement = () => {
+    document.querySelector('#share-requirement')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   // Select project by ID or object
   const handleSelectProject = (projectOrId) => {
@@ -59,7 +86,9 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#121316] font-sans antialiased">
       {/* Sticky Responsive Header */}
       <Header 
-        onOpenQuote={() => setIsQuoteOpen(true)} 
+        onOpenQuote={() => setIsQuoteOpen(true)}
+        onOpenClientPortal={openClientPortal}
+        onOpenAdminPortal={openAdminPortal}
       />
 
       {/* Main Page Sections */}
@@ -68,7 +97,16 @@ export default function App() {
         <Hero 
           onOpenQuote={() => setIsQuoteOpen(true)}
           onSelectProject={handleSelectProject}
+          onShareRequirement={scrollToRequirement}
         />
+
+        <div id="share-requirement">
+          <QuickRequirementBar
+            onOpenClientPortal={openClientPortal}
+            user={session.user}
+            onRequireLogin={() => setIsAuthOpen(true)}
+          />
+        </div>
 
         {/* 2. Trust / Intro Section */}
         <TrustIntro 
@@ -139,6 +177,29 @@ export default function App() {
         isOpen={isQuoteOpen}
         onClose={() => setIsQuoteOpen(false)}
       />
+
+      <ClientPortalModal
+        isOpen={isClientPortalOpen}
+        onClose={() => setIsClientPortalOpen(false)}
+        onOpenInvoice={(invoice) => setSelectedInvoice(invoice)}
+        onOpenNewRequirement={scrollToRequirement}
+        user={session.user}
+      />
+
+      <AdminPortalModal
+        isOpen={isAdminPortalOpen}
+        onClose={() => setIsAdminPortalOpen(false)}
+        onOpenInvoice={(invoice) => setSelectedInvoice(invoice)}
+        isAdmin={session.profile?.role === 'admin'}
+      />
+
+      <InvoiceModal
+        invoice={selectedInvoice}
+        isOpen={Boolean(selectedInvoice)}
+        onClose={() => setSelectedInvoice(null)}
+      />
+
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
       {/* Floating Heading Style Switcher */}
       <FontSwitcher />
