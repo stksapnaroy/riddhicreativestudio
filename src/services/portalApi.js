@@ -24,7 +24,9 @@ export async function getSessionProfile() {
 
 export async function sendEmailLink(email) {
   const client = requireClient();
-  const { error } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
+  // VITE_SITE_URL keeps links correct even when the request is triggered from a preview/local build.
+  const redirectTo = import.meta.env.VITE_SITE_URL || window.location.origin;
+  const { error } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo } });
   if (error) throw error;
 }
 
