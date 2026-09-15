@@ -22,11 +22,16 @@ export async function getSessionProfile() {
   return { user, profile };
 }
 
-export async function sendEmailLink(email) {
+export async function sendEmailOtp(email) {
   const client = requireClient();
-  // VITE_SITE_URL keeps links correct even when the request is triggered from a preview/local build.
-  const redirectTo = import.meta.env.VITE_SITE_URL || window.location.origin;
-  const { error } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo } });
+  // The client verifies the six-digit code directly, so no localhost redirect is involved.
+  const { error } = await client.auth.signInWithOtp({ email });
+  if (error) throw error;
+}
+
+export async function verifyEmailOtp(email, token) {
+  const client = requireClient();
+  const { error } = await client.auth.verifyOtp({ email, token, type: 'email' });
   if (error) throw error;
 }
 
