@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { X, ArrowRight, CheckCircle2, Sparkles, Send } from 'lucide-react';
+import { X, ArrowRight, CheckCircle2, Sparkles, MessageSquare, Mail } from 'lucide-react';
 import { serviceOptions, budgetOptions, studioInfo } from '../../data/companyData';
 
 export default function QuoteDrawer({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    service: 'Branding',
-    budget: '₹25,000 – ₹50,000',
+    service: 'Website Design & Development',
+    budget: budgetOptions[1] || '₹15,000 – ₹35,000 / $200 – $500',
     details: ''
   });
 
@@ -40,7 +40,7 @@ export default function QuoteDrawer({ isOpen, onClose }) {
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-    }, 700);
+    }, 600);
   };
 
   const handleReset = () => {
@@ -48,37 +48,46 @@ export default function QuoteDrawer({ isOpen, onClose }) {
     setFormData({
       name: '',
       email: '',
-      service: 'Branding',
-      budget: '₹25,000 – ₹50,000',
+      service: 'Website Design & Development',
+      budget: budgetOptions[1],
       details: ''
     });
     onClose();
   };
+
+  const whatsAppUrl = `https://wa.me/918585959480?text=${encodeURIComponent(
+    `*Fast Quote Request - Riddhi Print Studio*\n\n` +
+    `*Name:* ${formData.name}\n` +
+    `*Email:* ${formData.email}\n` +
+    `*Service:* ${formData.service}\n` +
+    `*Budget:* ${formData.budget}\n` +
+    `*Details:* ${formData.details || 'Quick quote request'}`
+  )}`;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div 
         onClick={onClose}
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
       />
 
       {/* Drawer */}
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-[#FAF9F5] border-l border-[#E7E5DE] shadow-2xl p-6 sm:p-8 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-300">
+        <div className="w-screen max-w-md bg-[#F8FAFC] border-l border-white/10 shadow-2xl p-6 sm:p-8 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-300 text-[#172033]">
           
           <div>
             {/* Header */}
-            <div className="flex items-center justify-between pb-6 border-b border-[#E7E5DE]">
+            <div className="flex items-center justify-between pb-6 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#2546FF]" />
-                <span className="font-display font-bold text-base text-[#0D0E11]">
-                  Project Quote Request
+                <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB]" />
+                <span className="font-display font-bold text-base text-[#172033]">
+                  Fast Project Quote
                 </span>
               </div>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-full hover:bg-neutral-200 text-neutral-500 hover:text-black transition-colors"
+                className="p-1.5 rounded-full hover:bg-white/10 text-[#64748B] hover:text-[#172033] transition-colors cursor-pointer"
                 aria-label="Close quote drawer"
               >
                 <X className="w-5 h-5" />
@@ -87,123 +96,121 @@ export default function QuoteDrawer({ isOpen, onClose }) {
 
             {/* Content */}
             {submitted ? (
-              <div className="py-16 text-center space-y-4 animate-in fade-in zoom-in duration-300">
-                <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+              <div className="py-12 text-center space-y-5 animate-in fade-in zoom-in duration-300">
+                <div className="w-14 h-14 rounded-full bg-[#2563EB]/20 border border-[#2563EB] text-[#2563EB] flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-7 h-7" />
                 </div>
-                <h3 className="font-display font-bold text-2xl text-neutral-900">
-                  Quote Request Sent!
+                <h3 className="font-display font-bold text-2xl text-[#172033]">
+                  Quote Brief Formatted!
                 </h3>
-                <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-                  Thank you, <span className="font-semibold">{formData.name}</span>. We will analyze your scope for <span className="font-semibold text-[#2546FF]">{formData.service}</span> and deliver an estimate within 24 hours.
+                <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
+                  Thank you, <span className="font-semibold text-[#172033]">{formData.name}</span>. To ensure instant delivery to our creative director, send it directly via WhatsApp:
                 </p>
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="mt-4 px-6 py-2.5 rounded-full bg-[#0D0E11] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#2546FF] transition-colors"
-                >
-                  Done
-                </button>
+
+                <div className="pt-2 space-y-3">
+                  <a
+                    href={whatsAppUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3 px-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Send via WhatsApp</span>
+                  </a>
+
+                  <button
+                    onClick={handleReset}
+                    className="w-full py-2.5 text-xs font-mono text-[#64748B] hover:text-[#172033] underline cursor-pointer"
+                  >
+                    Done & Close
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="py-6 space-y-5">
-                <div className="space-y-1">
-                  <h4 className="font-display font-bold text-xl text-neutral-900">
-                    Get a Tailored Estimate
-                  </h4>
-                  <p className="text-xs text-neutral-500">
-                    Tell us what you need and our lead creative will prepare a custom proposal.
-                  </p>
-                </div>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Fill in your basic project requirements below and we will prepare a milestone estimate.
+                </p>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-700 font-semibold block">
-                    Your Name *
-                  </label>
+                  <label className="text-[11px] font-mono uppercase text-[#64748B] font-semibold">Your Name *</label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Maya Patel"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5DE] text-sm bg-white focus:outline-none focus:border-[#2546FF] focus:ring-2 focus:ring-blue-100"
+                    placeholder="Alex Morgan"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFFFFF] border border-white/10 text-xs sm:text-sm text-[#172033] focus:outline-none focus:border-[#2563EB]"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-700 font-semibold block">
-                    Your Email *
-                  </label>
+                  <label className="text-[11px] font-mono uppercase text-[#64748B] font-semibold">Email Address *</label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="name@company.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5DE] text-sm bg-white focus:outline-none focus:border-[#2546FF] focus:ring-2 focus:ring-blue-100"
+                    placeholder="alex@company.com"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFFFFF] border border-white/10 text-xs sm:text-sm text-[#172033] focus:outline-none focus:border-[#2563EB]"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-700 font-semibold block">
-                    Primary Service Needed
-                  </label>
+                  <label className="text-[11px] font-mono uppercase text-[#64748B] font-semibold">Core Service</label>
                   <select
                     value={formData.service}
                     onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5DE] text-sm bg-white focus:outline-none focus:border-[#2546FF]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFFFFF] border border-white/10 text-xs sm:text-sm text-[#172033] focus:outline-none focus:border-[#2563EB]"
                   >
-                    {serviceOptions.map((svc) => (
-                      <option key={svc} value={svc}>{svc}</option>
+                    {serviceOptions.map((opt) => (
+                      <option key={opt} value={opt} className="bg-[#F8FAFC] text-white">
+                        {opt}
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-700 font-semibold block">
-                    Approximate Budget
-                  </label>
+                  <label className="text-[11px] font-mono uppercase text-[#64748B] font-semibold">Estimated Budget</label>
                   <select
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5DE] text-sm bg-white focus:outline-none focus:border-[#2546FF]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFFFFF] border border-white/10 text-xs sm:text-sm text-[#172033] focus:outline-none focus:border-[#2563EB]"
                   >
-                    {budgetOptions.map((b) => (
-                      <option key={b} value={b}>{b}</option>
+                    {budgetOptions.map((opt) => (
+                      <option key={opt} value={opt} className="bg-[#F8FAFC] text-white">
+                        {opt}
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-700 font-semibold block">
-                    Project Details
-                  </label>
+                  <label className="text-[11px] font-mono uppercase text-[#64748B] font-semibold">Project Notes</label>
                   <textarea
-                    rows={3}
+                    rows="3"
                     value={formData.details}
                     onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                    placeholder="Briefly describe what you're looking to build or design..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5DE] text-sm bg-white focus:outline-none focus:border-[#2546FF]"
+                    placeholder="Briefly describe your requirements..."
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFFFFF] border border-white/10 text-xs sm:text-sm text-[#172033] focus:outline-none focus:border-[#2563EB] resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 px-6 rounded-full bg-[#2546FF] hover:bg-[#1837E8] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-[#F8FAFC] font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#2563EB]/20 transition-all cursor-pointer"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Request Project Quote →'}
+                  {isSubmitting ? "Processing..." : "Generate Quote Brief →"}
                 </button>
               </form>
             )}
           </div>
 
-          {/* Drawer Footer */}
-          <div className="pt-6 border-t border-[#E7E5DE] text-xs text-neutral-500 font-mono">
-            <div>Direct Contact: {studioInfo.email}</div>
-            <div className="text-[10px] text-neutral-400 mt-1">
-              Riddhi Creative Studio • India
-            </div>
+          {/* Footer note */}
+          <div className="pt-4 border-t border-white/10 text-xs font-mono text-[#64748B]">
+            Need immediate support? WhatsApp: <a href={studioInfo.whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-[#2563EB] hover:underline">{studioInfo.phone}</a>
           </div>
 
         </div>

@@ -1,67 +1,65 @@
 import React from 'react';
-import { studioStats } from '../../data/companyData';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { studioCapabilitiesTicker, studioInfo } from '../../data/companyData';
+import { Sparkles, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export default function TrustIntro({ onOpenQuote }) {
   return (
-    <section className="py-20 sm:py-28 bg-[#FAF9F5] border-y border-[#E7E5DE] relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Top Editorial Split Statement */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          
-          <div className="lg:col-span-6 space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#2546FF] font-semibold">
-              <span className="w-2 h-2 rounded-full bg-[#2546FF]" />
-              Studio Philosophy
-            </div>
-            
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#0D0E11] tracking-tight leading-tight">
-              Creative Thinking.<br />
-              Beautiful Design.<br />
-              <span className="text-neutral-400">Real Results.</span>
-            </h2>
-          </div>
-
-          <div className="lg:col-span-6 space-y-6 pt-2">
-            <p className="text-base sm:text-lg text-neutral-600 leading-relaxed">
-              We combine creative thinking, strategic design and digital expertise to create work that looks great and works even better. 
-              Whether you need a single marketing piece or a complete visual identity, Riddhi Creative Studio is here to bring your ideas to life.
-            </p>
-
-            <div className="pt-2">
-              <button
-                onClick={onOpenQuote}
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#0D0E11] hover:text-[#2546FF] transition-colors group"
-              >
-                <span>Let's talk about your upcoming project</span>
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 text-[#2546FF]" />
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Small Stats Grid (Easily editable placeholders) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-16 pt-12 border-t border-[#E7E5DE]">
-          {studioStats.map((stat, idx) => (
-            <div 
-              key={idx} 
-              className="space-y-1.5 p-4 rounded-xl bg-white/60 border border-[#EAE8E0] hover:border-[#2546FF]/40 transition-colors"
-            >
-              <div className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-[#0D0E11] tracking-tight">
-                {stat.number}
-              </div>
-              <div className="text-sm font-semibold text-neutral-900">
-                {stat.label}
-              </div>
-              <div className="text-xs text-neutral-500 leading-normal">
-                {stat.desc}
-              </div>
+    <section className="py-14 sm:py-20 bg-[#F8FAFC] border-b border-slate-200/80 relative overflow-hidden">
+      {/* Moving capabilities ribbon in light blue */}
+      <div className="relative w-full overflow-hidden border-y border-blue-200/80 py-4 bg-[#EFF6FF]">
+        <div className="flex w-max animate-marquee space-x-8 text-xs font-mono uppercase tracking-widest text-[#172033] font-semibold">
+          {[...studioCapabilitiesTicker, ...studioCapabilitiesTicker].map((item, idx) => (
+            <div key={idx} className="flex items-center space-x-3">
+              <span className={`w-2 h-2 rounded-full ${
+                idx % 4 === 0 ? 'bg-[#2563EB]' : idx % 4 === 1 ? 'bg-[#8B5CF6]' : idx % 4 === 2 ? 'bg-[#14B8A6]' : 'bg-[#FF6B6B]'
+              }`} />
+              <span>{item}</span>
             </div>
           ))}
         </div>
+      </div>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+          
+          <div className="lg:col-span-5 space-y-4">
+            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#2563EB] font-bold">
+              <span className="w-2 h-2 rounded-full bg-[#2563EB]" />
+              The Studio Advantage
+            </div>
+            
+            <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-[#172033] tracking-tight leading-tight">
+              One Creative Partner.<br />
+              Complete Digital &<br />
+              <span className="text-[#2563EB]">Print Solutions.</span>
+            </h2>
+          </div>
+
+          <div className="lg:col-span-7 space-y-5">
+            <p className="text-base sm:text-lg text-[#64748B] leading-relaxed font-normal">
+              Most businesses lose time and brand consistency trying to coordinate between web developers who don't understand typography, graphic designers who don't know print bleeds, and print shops with no design support.
+            </p>
+            <p className="text-sm sm:text-base text-[#172033] leading-relaxed font-medium">
+              At <strong className="text-[#2563EB]">Riddhi Print Studio</strong>, we provide all three under one roof. Your responsive website, brand identity system, and physical print collateral are created with cohesive art direction, unified typography, and guaranteed production readiness.
+            </p>
+
+            <div className="pt-2 flex flex-wrap items-center gap-6">
+              <button
+                onClick={onOpenQuote}
+                className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider font-bold text-[#2563EB] hover:text-[#1D4ED8] transition-colors group cursor-pointer"
+              >
+                <span>Discuss Your Project Requirements</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+
+              <span className="text-xs font-mono text-[#64748B] flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#14B8A6]" />
+                Zero Agency Bloat • Direct Designer & Dev Access
+              </span>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
   );

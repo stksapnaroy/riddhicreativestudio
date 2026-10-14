@@ -1,7 +1,7 @@
 import React from 'react';
 import { portfolioCategories, portfolioData } from '../../data/portfolioData';
 import PortfolioCard from './PortfolioCard';
-import { Sparkles, Layers, Info } from 'lucide-react';
+import { Sparkles, Layers, Info, ArrowRight } from 'lucide-react';
 
 export default function Portfolio({ 
   activeCategory, 
@@ -18,23 +18,23 @@ export default function Portfolio({
       );
 
   return (
-    <section id="portfolio" className="py-24 sm:py-32 bg-[#FAF9F5] relative">
+    <section id="portfolio" className="py-20 sm:py-28 bg-[#F7F8FC] border-b border-slate-200 relative scroll-mt-24 sm:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#E7E5DE]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-slate-200">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#2546FF] font-semibold">
-              <span className="w-2 h-2 rounded-full bg-[#2546FF]" />
-              Portfolio & Case Studies
+            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#2563EB] font-semibold">
+              <span className="w-2 h-2 rounded-full bg-[#2563EB]" />
+              Work & Concept Showcases
             </div>
-            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-[#0D0E11] tracking-tight">
+            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-[#172033] tracking-tight">
               Selected Work
             </h2>
           </div>
 
-          <p className="text-neutral-600 text-base sm:text-lg max-w-md font-normal leading-relaxed">
-            A collection of ideas we've turned into meaningful visual experiences across print and digital media.
+          <p className="text-[#64748B] text-base sm:text-lg max-w-md font-normal leading-relaxed">
+            Curated concept case studies demonstrating our multidisciplinary craft across web applications, brand identities, and luxury print production.
           </p>
         </div>
 
@@ -43,7 +43,6 @@ export default function Portfolio({
           {portfolioCategories.map((category) => {
             const isSelected = activeCategory === category;
             
-            // Calculate count
             const count = category === "All" 
               ? portfolioData.length 
               : portfolioData.filter(p => p.category === category || p.secondaryCategories?.includes(category)).length;
@@ -52,15 +51,15 @@ export default function Portfolio({
               <button
                 key={category}
                 onClick={() => onSelectCategory(category)}
-                className={`group relative px-4 py-2 rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-200 flex items-center gap-2 ${
+                className={`group relative px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all duration-200 flex items-center gap-2 cursor-pointer ${
                   isSelected
-                    ? 'bg-[#0D0E11] text-white shadow-md'
-                    : 'bg-white text-neutral-600 border border-[#E7E5DE] hover:border-neutral-400 hover:text-black'
+                    ? 'bg-[#2563EB] text-[#F8FAFC] font-bold shadow-md shadow-[#2563EB]/10'
+                    : 'bg-white text-[#64748B] border border-slate-200 hover:border-[#D9468D]/50 hover:text-[#172033]'
                 }`}
               >
                 <span>{category}</span>
                 <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
-                  isSelected ? 'bg-white/20 text-white' : 'bg-neutral-100 text-neutral-500'
+                  isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#64748B]'
                 }`}>
                   {count}
                 </span>
@@ -81,43 +80,43 @@ export default function Portfolio({
             ))}
           </div>
         ) : (
-          <div className="py-20 text-center rounded-2xl bg-white border border-[#E7E5DE] p-8 space-y-4">
-            <Layers className="w-10 h-10 text-neutral-400 mx-auto" />
-            <div className="font-display font-bold text-lg">No projects found in this category</div>
-            <p className="text-xs text-neutral-500 max-w-sm mx-auto">
-              We frequently produce custom work in this category. Contact us to view private client archives.
+          <div className="py-20 text-center rounded-2xl bg-white border border-slate-200 p-8 space-y-4">
+            <Layers className="w-10 h-10 text-[#64748B] mx-auto" />
+            <div className="font-display font-bold text-lg text-[#172033]">No concepts found in this filter</div>
+            <p className="text-xs text-[#64748B] max-w-sm mx-auto">
+              We frequently produce custom multi-discipline work. Contact us to discuss your custom project scope.
             </p>
             <button
               onClick={() => onSelectCategory("All")}
-              className="text-xs font-mono text-[#2546FF] font-bold hover:underline"
+              className="text-xs font-mono text-[#2563EB] font-bold hover:underline cursor-pointer"
             >
               Reset to All Projects
             </button>
           </div>
         )}
 
-        {/* Transparent Notice about Concept Showcases */}
-        <div className="mt-14 p-4 rounded-xl bg-[#F4F3ED] border border-[#E7E5DE] flex items-start gap-3 text-xs text-neutral-600 max-w-3xl mx-auto">
-          <Info className="w-4 h-4 text-[#2546FF] shrink-0 mt-0.5" />
-          <div>
-            <span className="font-semibold text-neutral-900">Studio Portfolio Architecture: </span>
-            The projects above are structured concept showcases engineered to demonstrate our typography, 
-            print-ready dielines, 3D packaging systems, and digital design standards. They can easily be customized 
-            or populated with your live client assets.
+        {/* Transparent Concept Statement */}
+        <div className="mt-14 p-5 rounded-xl bg-white border border-slate-200 flex items-start gap-3.5 text-xs text-[#64748B] max-w-3xl mx-auto">
+          <Info className="w-4 h-4 text-[#2563EB] shrink-0 mt-0.5" />
+          <div className="leading-relaxed">
+            <span className="font-bold text-[#172033]">Studio Craft Disclosure: </span>
+            To maintain complete integrity with our clients, the presentations above are clearly identified 
+            <strong className="text-[#2563EB]"> Studio Sample Concepts</strong>. They illustrate our real typographic design systems, 
+            factory dieline preparation, 300 DPI CMYK pre-press standards, and responsive frontend code.
           </div>
         </div>
 
         {/* Bottom Portfolio Inquiry Banner */}
         <div className="mt-16 text-center">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-4 p-2 pl-5 pr-2 rounded-full bg-white border border-[#E7E5DE] shadow-sm">
-            <span className="text-xs sm:text-sm text-neutral-700 font-medium">
-              Want to see more tailored work in your specific industry?
+          <div className="inline-flex flex-col sm:flex-row items-center gap-4 p-2 pl-6 pr-2 rounded-full bg-white border border-slate-200 shadow-lg">
+            <span className="text-xs sm:text-sm text-[#172033] font-medium">
+              Ready to create something distinctive for your brand?
             </span>
             <button
               onClick={onOpenQuote}
-              className="px-5 py-2.5 rounded-full bg-[#0D0E11] text-white hover:bg-[#2546FF] text-xs font-bold uppercase tracking-wider transition-colors"
+              className="px-6 py-2.5 rounded-full bg-[#2563EB] text-[#F8FAFC] hover:bg-[#1D4ED8] text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer"
             >
-              Inquire About Custom Samples →
+              Discuss Your Project →
             </button>
           </div>
         </div>

@@ -1,23 +1,49 @@
 import React, { useState } from 'react';
 import { servicesData } from '../../data/servicesData';
 import { 
-  Printer, 
-  Palette, 
-  Sparkles, 
-  Package, 
-  Layout, 
   Code2, 
+  Sparkles, 
+  Printer, 
+  Layers, 
   ArrowRight,
-  CheckCircle2
+  CheckCircle2,
+  Clock,
+  FileCheck
 } from 'lucide-react';
 
-const serviceIcons = {
-  "print-design": Printer,
-  "graphic-design": Palette,
-  "branding": Sparkles,
-  "packaging-design": Package,
-  "web-design": Layout,
-  "website-development": Code2,
+const serviceTheme = {
+  "web-dev": {
+    icon: Code2,
+    badgeBg: "bg-blue-50 text-[#2563EB] border-blue-200",
+    accentBg: "bg-[#2563EB]",
+    hoverBorder: "hover:border-[#2563EB]/50",
+    iconBg: "bg-blue-50 text-[#2563EB]",
+    checkColor: "text-[#2563EB]"
+  },
+  "graphic-branding": {
+    icon: Sparkles,
+    badgeBg: "bg-purple-50 text-[#8B5CF6] border-purple-200",
+    accentBg: "bg-[#8B5CF6]",
+    hoverBorder: "hover:border-[#8B5CF6]/50",
+    iconBg: "bg-purple-50 text-[#8B5CF6]",
+    checkColor: "text-[#8B5CF6]"
+  },
+  "print-production": {
+    icon: Printer,
+    badgeBg: "bg-teal-50 text-[#14B8A6] border-teal-200",
+    accentBg: "bg-[#14B8A6]",
+    hoverBorder: "hover:border-[#14B8A6]/50",
+    iconBg: "bg-teal-50 text-[#14B8A6]",
+    checkColor: "text-[#14B8A6]"
+  },
+  "digital-creative": {
+    icon: Layers,
+    badgeBg: "bg-rose-50 text-[#FF6B6B] border-rose-200",
+    accentBg: "bg-[#FF6B6B]",
+    hoverBorder: "hover:border-[#FF6B6B]/50",
+    iconBg: "bg-rose-50 text-[#FF6B6B]",
+    checkColor: "text-[#FF6B6B]"
+  }
 };
 
 export default function Services({ onSelectCategory, onOpenQuote }) {
@@ -30,34 +56,37 @@ export default function Services({ onSelectCategory, onOpenQuote }) {
     const portfolioEl = document.querySelector('#portfolio');
     if (portfolioEl) {
       portfolioEl.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.location.href = `/portfolio?category=${encodeURIComponent(categoryFilter)}`;
     }
   };
 
   return (
-    <section id="services" className="py-24 sm:py-32 bg-[#FAF9F5] relative">
+    <section id="services" className="py-24 sm:py-32 bg-white border-b border-slate-200/80 relative scroll-mt-24 sm:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Heading & Subheading */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-16 border-b border-[#E7E5DE]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-14 border-b border-slate-200/80">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#2546FF] font-semibold">
-              <span className="w-2 h-2 rounded-full bg-[#2546FF]" />
-              Our Capabilities
+            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#2563EB] font-bold">
+              <span className="w-2 h-2 rounded-full bg-[#2563EB]" />
+              Core Capabilities
             </div>
-            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-[#0D0E11] tracking-tight">
-              What We Do
+            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-[#172033] tracking-tight">
+              Services & Deliverables
             </h2>
           </div>
 
-          <p className="text-neutral-600 text-base sm:text-lg max-w-md font-normal leading-relaxed">
-            From a single design to a complete digital experience, we've got you covered.
+          <p className="text-[#64748B] text-base sm:text-lg max-w-md font-normal leading-relaxed">
+            From single-page responsive builds to complete physical print suites and brand identities — everything is handled with master craftsmanship.
           </p>
         </div>
 
-        {/* 6 Interactive Service Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-12">
+        {/* 4 Core Service Cards (2x2 Grid) with distinct colorful accents */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
           {servicesData.map((service) => {
-            const IconComponent = serviceIcons[service.id] || Sparkles;
+            const theme = serviceTheme[service.id] || serviceTheme["web-dev"];
+            const IconComponent = theme.icon;
             const isHovered = activeCard === service.id;
 
             return (
@@ -65,92 +94,115 @@ export default function Services({ onSelectCategory, onOpenQuote }) {
                 key={service.id}
                 onMouseEnter={() => setActiveCard(service.id)}
                 onMouseLeave={() => setActiveCard(null)}
-                className={`group relative rounded-2xl p-7 sm:p-8 bg-white border transition-all duration-300 flex flex-col justify-between ${
-                  isHovered 
-                    ? 'border-[#2546FF] shadow-xl shadow-[#2546FF]/5 -translate-y-1' 
-                    : 'border-[#E7E5DE] hover:border-neutral-400 shadow-xs'
+                className={`group relative rounded-2xl p-7 sm:p-9 bg-white border border-slate-200/90 shadow-xs hover:shadow-xl hover:shadow-blue-500/8 transition-all duration-300 flex flex-col justify-between ${theme.hoverBorder} ${
+                  isHovered ? '-translate-y-1' : ''
                 }`}
               >
                 <div>
-                  {/* Top Row: Index & Category Icon */}
-                  <div className="flex items-center justify-between pb-6">
-                    <span className="font-mono text-xs font-bold text-neutral-400 tracking-wider">
-                      {service.number}
-                    </span>
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                      isHovered ? 'bg-[#2546FF] text-white' : 'bg-neutral-100 text-neutral-700'
+                  {/* Top Row: Index, Badge & Icon */}
+                  <div className="flex items-center justify-between pb-6 border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-xs font-bold text-[#172033] bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                        {service.number}
+                      </span>
+                      <span className={`text-[10px] font-mono uppercase tracking-widest font-bold px-2.5 py-0.5 rounded-full border ${theme.badgeBg}`}>
+                        {service.featuredBadge}
+                      </span>
+                    </div>
+
+                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                      isHovered ? `${theme.accentBg} text-white shadow-md` : `${theme.iconBg} border border-slate-100`
                     }`}>
                       <IconComponent className="w-5 h-5" />
                     </div>
                   </div>
 
                   {/* Title & Tagline */}
-                  <h3 className="font-display font-bold text-2xl text-[#0D0E11] group-hover:text-[#2546FF] transition-colors">
+                  <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#172033] group-hover:text-[#2563EB] transition-colors mt-6">
                     {service.title}
                   </h3>
-                  <div className="text-xs font-medium text-neutral-500 mt-1 mb-4">
+                  <div className="text-xs sm:text-sm font-medium text-[#64748B] mt-2 mb-4 leading-relaxed">
                     {service.tagline}
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-neutral-600 leading-relaxed">
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     {service.description}
                   </p>
 
                   {/* Included Items Tag Pills */}
-                  <div className="mt-6 pt-5 border-t border-neutral-100">
-                    <div className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-semibold mb-2.5">
-                      Included Services
+                  <div className="mt-6 pt-5 border-t border-slate-100">
+                    <div className="text-[11px] font-mono uppercase tracking-wider text-[#64748B] font-semibold mb-3">
+                      Key Deliverables & Formats
                     </div>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {service.items.map((item, i) => (
-                        <span
+                        <div
                           key={i}
-                          className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-neutral-100/80 text-neutral-700 border border-neutral-200/60"
+                          className="flex items-center gap-2 text-xs text-[#172033] bg-[#F8FAFC] p-2.5 rounded-xl border border-slate-200/70"
                         >
-                          {item}
-                        </span>
+                          <CheckCircle2 className={`w-3.5 h-3.5 ${theme.checkColor} shrink-0`} />
+                          <span className="font-medium">{item}</span>
+                        </div>
                       ))}
                     </div>
                   </div>
+
+                  {/* Production specs callout */}
+                  <div className="mt-5 p-4 rounded-xl bg-[#EFF6FF]/60 border border-blue-100 text-xs text-[#64748B] space-y-1">
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#2563EB] font-bold uppercase">
+                      <FileCheck className="w-3.5 h-3.5" />
+                      <span>Delivery Package:</span>
+                    </div>
+                    <p className="text-[11px] text-slate-700 leading-relaxed font-mono">
+                      {service.deliverables}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Bottom Action CTA */}
-                <div className="mt-8 pt-4 border-t border-neutral-100 flex items-center justify-between">
-                  <button
-                    onClick={() => handleExplore(service.categoryFilter)}
-                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0D0E11] group-hover:text-[#2546FF] transition-colors"
-                  >
-                    <span>{service.cta}</span>
-                  </button>
+                {/* Bottom Action Bar */}
+                <div className="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-mono text-[#64748B]">
+                    <Clock className="w-3.5 h-3.5 text-[#2563EB]" />
+                    <span>Est. {service.turnaround}</span>
+                  </div>
 
-                  <button
-                    onClick={onOpenQuote}
-                    className="text-[11px] font-mono text-neutral-400 hover:text-black underline transition-colors"
-                  >
-                    Inquire
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => handleExplore(service.categoryFilter)}
+                      className="text-xs font-mono text-[#64748B] hover:text-[#2563EB] underline transition-colors cursor-pointer"
+                    >
+                      View Concepts
+                    </button>
+                    <button
+                      onClick={onOpenQuote}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-xs font-bold uppercase tracking-wider text-[#2563EB] transition-all cursor-pointer border border-blue-200"
+                    >
+                      <span>Inquire</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Bottom studio promise banner */}
-        <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-[#0D0E11] text-white flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Bottom studio custom retainer banner */}
+        <div className="mt-14 p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-[#EFF6FF] via-white to-[#EFF6FF] border border-blue-200 text-[#172033] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="space-y-1 text-center md:text-left">
-            <div className="font-display font-bold text-lg sm:text-xl">
-              Need a custom multi-discipline design package?
+            <div className="font-display font-bold text-xl sm:text-2xl text-[#172033]">
+              Looking for a unified multi-discipline package?
             </div>
-            <div className="text-xs sm:text-sm text-neutral-400">
-              We bundle print collateral, branding, packaging, and websites into seamless project retainers.
+            <div className="text-xs sm:text-sm text-[#64748B] max-w-xl">
+              Combine a brand identity system, custom responsive website, and complete print suite into a single managed milestone timeline.
             </div>
           </div>
           <button
             onClick={onOpenQuote}
-            className="px-6 py-3 rounded-full bg-[#2546FF] hover:bg-[#1837E8] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md whitespace-nowrap"
+            className="px-7 py-3.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md shadow-blue-500/20 whitespace-nowrap cursor-pointer"
           >
-            Request Custom Package →
+            Request Multi-Service Proposal →
           </button>
         </div>
 

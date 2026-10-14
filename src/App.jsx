@@ -2,20 +2,18 @@ import React, { useEffect, useState } from 'react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Hero from './components/hero/Hero';
-import TrustIntro from './components/sections/TrustIntro';
 import Services from './components/sections/Services';
-import FeaturedProject from './components/sections/FeaturedProject';
+import HomeServices from './components/sections/HomeServices';
 import Portfolio from './components/sections/Portfolio';
 import WhyUs from './components/sections/WhyUs';
 import ProcessTimeline from './components/sections/ProcessTimeline';
 import AboutStudio from './components/sections/AboutStudio';
-import Testimonials from './components/sections/Testimonials';
+import CraftStandards from './components/sections/CraftStandards';
+import FAQSection from './components/sections/FAQSection';
 import FullCTA from './components/sections/FullCTA';
 import ContactSection from './components/sections/ContactSection';
 import ProjectModal from './components/modals/ProjectModal';
 import QuoteDrawer from './components/modals/QuoteDrawer';
-import FontSwitcher from './components/ui/FontSwitcher';
-import QuickRequirementBar from './components/sections/QuickRequirementBar';
 import ClientPortalModal from './components/portals/ClientPortalModal';
 import InvoiceModal from './components/portals/InvoiceModal';
 import AdminPortalModal from './components/portals/AdminPortalModal';
@@ -25,7 +23,7 @@ import { supabase } from './lib/supabase';
 import { portfolioData } from './data/portfolioData';
 
 export default function App() {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState(() => new URLSearchParams(window.location.search).get('category') || "All");
   const [selectedProject, setSelectedProject] = useState(null);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [prefilledService, setPrefilledService] = useState("");
@@ -46,10 +44,6 @@ export default function App() {
   const openClientPortal = () => session.user ? setIsClientPortalOpen(true) : setIsAuthOpen(true);
   const openAdminPortal = () => session.profile?.role === 'admin' ? setIsAdminPortalOpen(true) : setIsAuthOpen(true);
 
-  const scrollToRequirement = () => {
-    document.querySelector('#share-requirement')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
   // Select project by ID or object
   const handleSelectProject = (projectOrId) => {
     if (typeof projectOrId === 'string') {
@@ -61,17 +55,15 @@ export default function App() {
   };
 
   const handleStartProjectFromCaseStudy = (serviceCategory) => {
-    // Map category to service option name
-    let mappedService = "Branding";
-    if (serviceCategory === "Print") mappedService = "Print Design";
-    else if (serviceCategory === "Packaging") mappedService = "Packaging Design";
-    else if (serviceCategory === "Graphic Design") mappedService = "Graphic Design";
-    else if (serviceCategory === "Social Media") mappedService = "Social Media Design";
-    else if (serviceCategory === "Web Design") mappedService = "Web Design";
+    let mappedService = "Graphic Design & Branding";
+    if (serviceCategory === "Print") mappedService = "Print Design & Production";
+    else if (serviceCategory === "Packaging") mappedService = "Packaging & Dielines";
+    else if (serviceCategory === "Web Design" || serviceCategory === "Web") mappedService = "Website Design & Development";
+    else if (serviceCategory === "Digital") mappedService = "Digital Creative Services";
 
     setPrefilledService(mappedService);
     
-    // Scroll to contact form
+    // Smooth scroll to contact section
     const contactEl = document.querySelector('#contact');
     if (contactEl) {
       contactEl.scrollIntoView({ behavior: 'smooth' });
@@ -82,82 +74,33 @@ export default function App() {
     setActiveCategory(category);
   };
 
+  const page = window.location.pathname.replace(/\/$/, '') || '/';
+  const home = page === '/';
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#121316] font-sans antialiased">
-      {/* Sticky Responsive Header */}
+    <div className="min-h-screen flex flex-col bg-white text-[#172033] font-sans antialiased selection:bg-[#2563EB]/15 selection:text-[#2563EB]">
+      {/* 1. Header & Navigation */}
       <Header 
         onOpenQuote={() => setIsQuoteOpen(true)}
         onOpenClientPortal={openClientPortal}
         onOpenAdminPortal={openAdminPortal}
       />
 
-      {/* Main Page Sections */}
+      {/* Main Page Flow */}
       <main className="flex-grow">
-        {/* 1. Hero Section */}
-        <Hero 
-          onOpenQuote={() => setIsQuoteOpen(true)}
-          onSelectProject={handleSelectProject}
-          onShareRequirement={scrollToRequirement}
-        />
-
-        <div id="share-requirement">
-          <QuickRequirementBar
-            onOpenClientPortal={openClientPortal}
-            user={session.user}
-            onRequireLogin={() => setIsAuthOpen(true)}
-          />
-        </div>
-
-        {/* 2. Trust / Intro Section */}
-        <TrustIntro 
-          onOpenQuote={() => setIsQuoteOpen(true)}
-        />
-
-        {/* 3. Services Section */}
-        <Services 
-          onSelectCategory={handleCategoryFilter}
-          onOpenQuote={() => setIsQuoteOpen(true)}
-        />
-
-        {/* 4. Featured Project Section (Editorial Split) */}
-        <FeaturedProject 
-          onOpenProject={handleSelectProject}
-          onOpenQuote={() => setIsQuoteOpen(true)}
-        />
-
-        {/* 5. Selected Work / Portfolio Grid */}
-        <Portfolio 
-          activeCategory={activeCategory}
-          onSelectCategory={handleCategoryFilter}
-          onSelectProject={handleSelectProject}
-          onOpenQuote={() => setIsQuoteOpen(true)}
-        />
-
-        {/* 6. Why Work With Us */}
-        <WhyUs />
-
-        {/* 7. How We Work / Process Timeline */}
-        <ProcessTimeline 
-          onOpenQuote={() => setIsQuoteOpen(true)}
-        />
-
-        {/* 8. About Riddhi Creative Studio */}
-        <AboutStudio 
-          onOpenQuote={() => setIsQuoteOpen(true)}
-        />
-
-        {/* 9. Client Testimonials */}
-        <Testimonials />
-
-        {/* 10. Visually Powerful Full-Width CTA */}
-        <FullCTA 
-          onOpenQuote={() => setIsQuoteOpen(true)}
-        />
-
-        {/* 11. Contact Inquiry Form & Studio Information */}
-        <ContactSection 
-          prefilledService={prefilledService}
-        />
+        {home && <>
+          <Hero />
+          <HomeServices />
+          <Portfolio activeCategory={activeCategory} onSelectCategory={handleCategoryFilter} onSelectProject={handleSelectProject} onOpenQuote={() => setIsQuoteOpen(true)} />
+          <WhyUs onOpenQuote={() => setIsQuoteOpen(true)} />
+          <ProcessTimeline onOpenQuote={() => setIsQuoteOpen(true)} />
+          <FullCTA onOpenQuote={() => setIsQuoteOpen(true)} />
+        </>}
+        {page === '/services' && <><PageIntro title="Services" text="Creative services to take your brand from first idea to a polished digital or print experience."/><Services onSelectCategory={handleCategoryFilter} onOpenQuote={() => setIsQuoteOpen(true)} /><WhyUs onOpenQuote={() => setIsQuoteOpen(true)} /><ProcessTimeline onOpenQuote={() => setIsQuoteOpen(true)} /></>}
+        {page === '/portfolio' && <><PageIntro title="Portfolio" text="A selection of clearly labeled studio sample concepts across web, identity, print and packaging."/><Portfolio activeCategory={activeCategory} onSelectCategory={handleCategoryFilter} onSelectProject={handleSelectProject} onOpenQuote={() => setIsQuoteOpen(true)} /></>}
+        {page === '/about' && <><PageIntro title="About the Studio" text="One creative partner for design, development and print solutions."/><AboutStudio onOpenQuote={() => setIsQuoteOpen(true)} /><CraftStandards /><FAQSection onOpenQuote={() => setIsQuoteOpen(true)} /></>}
+        {page === '/contact' && <><PageIntro title="Talk about your project" text="Share a little about what you are building. We will help you find the right next step."/><ContactSection prefilledService={prefilledService} /></>}
+        {!['/', '/services', '/portfolio', '/about', '/contact'].includes(page) && <PageIntro title="Page not found" text="The page you’re looking for isn’t available." />}
       </main>
 
       {/* Studio Footer */}
@@ -165,7 +108,7 @@ export default function App() {
         onSelectCategory={handleCategoryFilter}
       />
 
-      {/* Interactive Modals */}
+      {/* Interactive Modals & Drawers */}
       <ProjectModal 
         project={selectedProject}
         isOpen={Boolean(selectedProject)}
@@ -182,7 +125,6 @@ export default function App() {
         isOpen={isClientPortalOpen}
         onClose={() => setIsClientPortalOpen(false)}
         onOpenInvoice={(invoice) => setSelectedInvoice(invoice)}
-        onOpenNewRequirement={scrollToRequirement}
         user={session.user}
       />
 
@@ -199,10 +141,14 @@ export default function App() {
         onClose={() => setSelectedInvoice(null)}
       />
 
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
-
-      {/* Floating Heading Style Switcher */}
-      <FontSwitcher />
+      <AuthModal 
+        isOpen={isAuthOpen} 
+        onClose={() => setIsAuthOpen(false)} 
+      />
     </div>
   );
+}
+
+function PageIntro({ title, text }) {
+  return <section className="pt-36 pb-14 sm:pt-40 sm:pb-20 bg-[#EFF6FF]"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><p className="text-sm font-semibold uppercase tracking-widest text-[#2563EB]">Riddhi Print Studio</p><h1 className="mt-4 text-4xl sm:text-6xl font-black tracking-tight text-[#172033]">{title}</h1><p className="mt-5 max-w-2xl text-lg text-[#64748B]">{text}</p></div></section>;
 }

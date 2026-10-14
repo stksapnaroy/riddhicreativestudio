@@ -1,461 +1,123 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  ArrowRight, 
-  Sparkles, 
-  CheckCircle2, 
-  Layers, 
-  Printer, 
-  Package, 
-  Layout, 
-  Smartphone, 
-  Coffee, 
-  BookOpen, 
-  ExternalLink,
-  ChevronRight,
-  Maximize2
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowDown, ArrowRight, Check, Sparkles } from 'lucide-react';
+import { studioInfo } from '../../data/companyData';
 
-const heroDisciplines = [
-  {
-    id: "packaging",
-    number: "01",
-    tabLabel: "Packaging & 3D",
-    badge: "Tactile Physical Craft",
-    projectId: "nova-coffee",
-    title: "Nova Coffee & Bloom Skincare",
-    subtitle: "Custom pouch packaging, botanical jars, and foil-embossed cotton stationery.",
-    specs: ["CMYK Offset", "Spot UV & Gold Foil", "FSC Certified Stock", "Factory Dielines"],
-    color: "#D97706",
-    accentGlow: "rgba(217, 119, 6, 0.18)",
-  },
-  {
-    id: "print",
-    number: "02",
-    tabLabel: "Editorial & Print",
-    badge: "Print Masterworks",
-    projectId: "urban-properties",
-    title: "Urban Monograph & Editorial",
-    subtitle: "Hardcover Swiss-bound property book, architectural brochures, and floorplans.",
-    specs: ["200gsm Art Paper", "Thread-Sewn Binding", "Copper Foil Deboss", "1:1 Scale Blueprints"],
-    color: "#0284C7",
-    accentGlow: "rgba(2, 132, 199, 0.18)",
-  },
-  {
-    id: "digital",
-    number: "03",
-    tabLabel: "Web & UI/UX",
-    badge: "Modern Digital Experiences",
-    projectId: "creative-studio-web",
-    title: "Creative Studio & SaaS Web",
-    subtitle: "Fluid interactive web design, responsive component systems, and sub-second load times.",
-    specs: ["React & Tailwind", "60 FPS Animations", "Mobile Ergonomics", "Lighthouse 99/100"],
-    color: "#2546FF",
-    accentGlow: "rgba(37, 70, 255, 0.22)",
-  },
-  {
-    id: "social",
-    number: "04",
-    tabLabel: "Social & Campaigns",
-    badge: "Performance Creatives",
-    projectId: "fitlife-campaign",
-    title: "FitLife High-Voltage Campaign",
-    subtitle: "High-conversion Instagram carousels, paid ad creative suites, and kinetic typography.",
-    specs: ["Modular Figma Kit", "9:16 Vertical Story Ads", "+420% CTR Boost", "Vector Stickers"],
-    color: "#DC2626",
-    accentGlow: "rgba(220, 38, 38, 0.18)",
-  }
+const needs = [
+  'Website Design', 'E-commerce Website', 'Landing Page', 'Branding & Logo',
+  'Graphic Design', 'Social Media Creatives', 'Printing & Packaging', 'Other'
 ];
 
-export default function Hero({ onOpenQuote, onSelectProject, onShareRequirement }) {
-  const [activeTab, setActiveTab] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+export default function Hero() {
+  const [sent, setSent] = useState(false);
 
-  // Auto cycle tabs every 6.5s unless paused by interaction
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-    const interval = setInterval(() => {
-      setActiveTab((prev) => (prev + 1) % heroDisciplines.length);
-    }, 6500);
-    return () => clearInterval(interval);
-  }, [isAutoPlaying]);
-
-  const current = heroDisciplines[activeTab];
-
-  const scrollToSection = (id) => {
-    const el = document.querySelector(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const subject = `Free consultation request — ${data.get('name')}`;
+    const body = [
+      `Name: ${data.get('name')}`,
+      `Business: ${data.get('business') || 'Not provided'}`,
+      `Phone: ${data.get('phone')}`,
+      `Email: ${data.get('email')}`,
+      `Interested in: ${data.get('need')}`,
+      `Project details: ${data.get('details') || 'Not provided'}`
+    ].join('\n');
+    window.location.href = `mailto:${studioInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setSent(true);
   };
 
   return (
-    <section 
-      id="home" 
-      className="relative pt-24 sm:pt-32 pb-20 sm:pb-28 bg-[#FAF9F5] border-b border-[#E7E5DE] overflow-hidden select-none"
-    >
-      {/* Background Architectural Studio Grid & Ambience */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-      <div 
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] rounded-full blur-[140px] pointer-events-none transition-colors duration-1000"
-        style={{ backgroundColor: current.accentGlow }}
-      />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-        {/* 1. Top Agency Ticker & Coordinates */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-[#E7E5DE] text-[11px] font-mono text-neutral-600">
-          <div className="flex items-center gap-3">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2546FF] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2546FF]" />
-            </span>
-            <span className="font-semibold text-neutral-900 uppercase tracking-wider">
-              Riddhi Creative Studio
-            </span>
-            <span className="text-neutral-300 hidden sm:inline">•</span>
-            <span className="hidden sm:inline text-neutral-500">
-              India // Remote Worldwide
-            </span>
+    <section id="home" className="rps-hero relative isolate overflow-hidden">
+      <div className="rps-hero-glow" aria-hidden="true" />
+      <div className="rps-hero-inner relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-4 pb-10 pt-28 sm:px-6 sm:pt-32 lg:min-h-[100svh] lg:grid-cols-[1.02fr_.88fr] lg:gap-16 lg:px-8 lg:pb-12 lg:pt-28">
+        <div className="relative py-4 sm:py-8 lg:py-10">
+          <div className="absolute -left-16 top-16 -z-10 hidden h-52 w-52 rounded-full border border-[#F5A623]/30 lg:block" />
+          <div className="absolute -left-10 top-22 -z-10 hidden h-40 w-40 rounded-full border border-dashed border-[#D9468D]/35 lg:block" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#E9D5FF] bg-white/80 px-3.5 py-2 text-[10px] font-bold tracking-[.19em] text-[#6D28D9] shadow-sm sm:text-[11px]">
+            <span className="h-2 w-2 rounded-full bg-[#F59E0B]" /> YOUR COMPLETE CREATIVE PARTNER
           </div>
 
-          <div className="flex items-center gap-4 text-neutral-500">
-            <span className="hidden md:inline bg-white px-2.5 py-0.5 rounded-full border border-[#E7E5DE]">
-              Q2/Q3 Bookings Open
-            </span>
-            <span className="text-neutral-800 font-semibold">
-              From Print to Pixels
-            </span>
+          <h1 className="mt-7 max-w-3xl font-display text-[clamp(2.8rem,6vw,5.65rem)] font-extrabold leading-[.99] tracking-[-.065em] text-[#172033]">
+            Ideas Se Identity Tak, <span className="rps-gradient-text">We Create It All.</span>
+          </h1>
+          <p className="mt-6 max-w-xl text-base leading-7 text-[#596579] sm:text-lg sm:leading-8">
+            From stunning websites and brand identities to eye-catching graphics and premium print designs, we help your business stand out.
+          </p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="/services" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#2563EB] px-6 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-[#173B75]">
+              Explore Our Services <ArrowRight className="h-4 w-4" />
+            </a>
+            <a href="/portfolio" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#D9DEEA] bg-white/80 px-6 text-sm font-bold text-[#27334A] transition hover:border-[#D9468D] hover:text-[#B42366]">
+              View Our Work <ArrowDown className="h-4 w-4" />
+            </a>
+          </div>
+
+          <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-medium text-[#5B6578]">
+            {['Web & UI/UX', 'Brand & Graphics', 'Print & Packaging'].map((item, i) => (
+              <span key={item} className="inline-flex items-center gap-2"><span className={`h-2 w-2 rounded-full ${['bg-[#2563EB]', 'bg-[#D9468D]', 'bg-[#14B8A6]'][i]}`} />{item}</span>
+            ))}
+          </div>
+
+          <div className="rps-mandala absolute -right-4 top-2 hidden h-32 w-32 text-[#F59E0B]/70 xl:block" aria-hidden="true">
+            <svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="42" stroke="currentColor" strokeWidth="1.4" strokeDasharray="2 4"/><circle cx="60" cy="60" r="27" stroke="currentColor"/><path d="M60 8 69 43 103 27 77 53 112 60 77 67 103 93 69 77 60 112 51 77 17 93 43 67 8 60 43 53 17 27 51 43 60 8Z" stroke="currentColor" strokeWidth="1.2"/><circle cx="60" cy="60" r="7" fill="currentColor"/></svg>
           </div>
         </div>
 
-        {/* 2. Main Hero Split Grid: Editorial Typography + Interactive 3D Studio Stage */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-
-          {/* Left Column: Bold Asymmetric Typography & Magnetic CTAs (Cols 1-5) */}
-          <div className="lg:col-span-5 space-y-6">
-            
-            {/* Studio Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E7E5DE] shadow-2xs">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#2546FF] font-bold">
-                Multidisciplinary Design Agency
-              </span>
+        <div className="relative mx-auto w-full max-w-[520px] lg:ml-auto">
+          <div className="rps-arch-back" aria-hidden="true" />
+          <div className="relative rounded-[28px] border border-white/80 bg-white/95 p-5 shadow-[0_28px_90px_-35px_rgba(46,48,89,.32)] backdrop-blur-xl sm:rounded-[32px] sm:p-7">
+            <div className="absolute -right-2 -top-3 grid h-12 w-12 place-items-center rounded-2xl bg-[#FACC15] text-[#5A3410] shadow-lg shadow-amber-500/20 sm:-right-4 sm:-top-4 sm:h-14 sm:w-14"><Sparkles className="h-6 w-6" /></div>
+            <div className="mb-5 pr-8 sm:mb-6">
+              <p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#C24178]">LET’S MAKE IT HAPPEN</p>
+              <h2 className="mt-2 font-display text-2xl font-extrabold leading-tight tracking-tight text-[#172033] sm:text-[1.8rem]">Let&apos;s Create Something Amazing!</h2>
+              <p className="mt-2 text-sm leading-6 text-[#64748B]">Tell us what you need. We&apos;ll help bring your idea to life.</p>
             </div>
 
-            {/* Giant Headline */}
-            <h1 className="font-display font-extrabold text-4xl sm:text-6xl text-[#0D0E11] tracking-tight leading-[1.05]">
-              From Print.<br />
-              To Pixels.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2546FF] via-[#1A36E8] to-[#0D0E11]">
-                We Design It All.
-              </span>
-            </h1>
-
-            {/* Narrative text */}
-            <p className="text-base sm:text-lg text-neutral-600 leading-relaxed font-normal">
-              Riddhi Creative Studio creates thoughtful designs that help businesses look better, 
-              communicate clearly and stand out — from tactile print & luxury packaging to digital experiences and modern websites.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
-              <button
-                onClick={() => scrollToSection('#portfolio')}
-                className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-[#0D0E11] text-white hover:bg-[#2546FF] text-xs font-bold uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 group"
-              >
-                <span>View Our Work</span>
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-
-              <button
-                onClick={onOpenQuote}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white text-neutral-900 border border-[#D9D7CE] hover:border-neutral-900 hover:bg-neutral-50 text-xs font-bold uppercase tracking-wider transition-all duration-200"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#2546FF]" />
-                <span>Start a Project</span>
-              </button>
-
-              <button
-                onClick={onShareRequirement}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/70 text-neutral-900 border border-[#D9D7CE] hover:border-[#2546FF] hover:text-[#2546FF] text-xs font-bold uppercase tracking-wider transition-all duration-200"
-              >
-                <BookOpen className="w-3.5 h-3.5" />
-                <span>Share an Idea</span>
-              </button>
-            </div>
-
-            {/* Discipline Quick Jump Links */}
-            <div className="pt-4 border-t border-[#E7E5DE] space-y-2">
-              <div className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 font-semibold">
-                Explore Core Disciplines:
+            {sent ? (
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900" role="status">
+                <div className="flex items-center gap-2 font-bold"><Check className="h-5 w-5" /> Your enquiry is ready in your email app.</div>
+                <p className="mt-2 leading-6">If it didn&apos;t open, email us at <a className="font-semibold underline" href={`mailto:${studioInfo.email}`}>{studioInfo.email}</a>. This website does not store enquiry details.</p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {heroDisciplines.map((item, idx) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveTab(idx);
-                      setIsAutoPlaying(false);
-                    }}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
-                      activeTab === idx
-                        ? 'bg-[#0D0E11] text-white font-semibold shadow-xs'
-                        : 'bg-white border border-[#E7E5DE] text-neutral-600 hover:border-neutral-400 hover:text-black'
-                    }`}
-                  >
-                    {item.tabLabel}
-                  </button>
-                ))}
-              </div>
-            </div>
-
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3.5">
+                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+                  <Field label="Full Name" name="name" placeholder="Your name" required />
+                  <Field label="Business Name" name="business" placeholder="Your business (optional)" />
+                  <Field label="Phone Number" name="phone" type="tel" placeholder="+91" required />
+                  <Field label="Email Address" name="email" type="email" placeholder="you@example.com" required />
+                </div>
+                <label className="block text-xs font-semibold text-[#344054]">
+                  What do you need? <span className="text-[#D9468D]" aria-hidden="true">*</span>
+                  <select name="need" required defaultValue="" className="rps-field mt-1.5">
+                    <option value="" disabled>Select a service</option>
+                    {needs.map((need) => <option key={need}>{need}</option>)}
+                  </select>
+                </label>
+                <label className="block text-xs font-semibold text-[#344054]">
+                  Project Details <span className="font-normal text-[#8992A2]">(optional)</span>
+                  <textarea name="details" rows="2" placeholder="A few words about your project…" className="rps-field mt-1.5 resize-y" />
+                </label>
+                <button type="submit" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2563EB] via-[#6845D9] to-[#B93883] px-5 text-sm font-bold text-white shadow-md shadow-purple-600/15 transition hover:brightness-105 focus:outline-none focus:ring-4 focus:ring-purple-200">
+                  Get a Free Consultation <ArrowRight className="h-4 w-4" />
+                </button>
+                <p className="text-center text-[10px] leading-4 text-[#7B8494]">Your details are used to prepare an email enquiry. They aren&apos;t stored on this website.</p>
+              </form>
+            )}
           </div>
-
-          {/* Right Column: Interactive 3D Studio Stage (Cols 6-12) */}
-          <div 
-            className="lg:col-span-7"
-            onMouseEnter={() => setIsAutoPlaying(false)}
-            onMouseLeave={() => setIsAutoPlaying(true)}
-          >
-            {/* The Studio Canvas Box with Precision Crop Marks */}
-            <div className="relative rounded-3xl bg-[#0D0E11] p-5 sm:p-8 border border-neutral-800 shadow-2xl text-white overflow-hidden transition-all duration-500">
-              
-              {/* Corner Print Register & Crop Marks */}
-              <div className="absolute top-3 left-3 text-[10px] font-mono text-neutral-600 pointer-events-none">┌ 3.0mm</div>
-              <div className="absolute top-3 right-3 text-[10px] font-mono text-neutral-600 pointer-events-none">3.0mm ┐</div>
-              <div className="absolute bottom-3 left-3 text-[10px] font-mono text-neutral-600 pointer-events-none">└ CMYK</div>
-              <div className="absolute bottom-3 right-3 text-[10px] font-mono text-neutral-600 pointer-events-none">300 DPI ┘</div>
-
-              {/* Top Discipline Switcher Tabs on Canvas */}
-              <div className="flex items-center justify-between gap-2 pb-5 border-b border-white/10 overflow-x-auto scrollbar-none">
-                <div className="flex items-center gap-1.5">
-                  {heroDisciplines.map((d, idx) => {
-                    const isSelected = activeTab === idx;
-                    return (
-                      <button
-                        key={d.id}
-                        onClick={() => {
-                          setActiveTab(idx);
-                          setIsAutoPlaying(false);
-                        }}
-                        className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all flex items-center gap-1.5 ${
-                          isSelected
-                            ? 'bg-white text-black font-bold shadow-md'
-                            : 'text-neutral-400 hover:text-white hover:bg-white/5'
-                        }`}
-                      >
-                        <span className="opacity-60">{d.number}</span>
-                        <span>{d.tabLabel}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div className="hidden sm:flex items-center gap-1 text-[10px] font-mono text-neutral-500">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Interactive</span>
-                </div>
-              </div>
-
-              {/* Dynamic Visual Stage Container */}
-              <div className="py-6 min-h-[360px] sm:min-h-[400px] flex flex-col justify-between">
-                
-                {/* Visual Content Rendered Based on Active Discipline */}
-                <div 
-                  onClick={() => onSelectProject && onSelectProject(current.projectId)}
-                  className="cursor-pointer group relative rounded-2xl bg-gradient-to-b from-white/5 to-white/0 p-4 sm:p-6 border border-white/10 hover:border-[#2546FF]/80 transition-all duration-500"
-                >
-                  
-                  {/* Packaging & 3D Stage */}
-                  {current.id === "packaging" && (
-                    <div className="relative h-64 sm:h-72 flex items-center justify-center overflow-hidden">
-                      {/* Ambient warm glow */}
-                      <div className="absolute inset-0 bg-amber-500/10 rounded-xl blur-2xl pointer-events-none" />
-                      
-                      <div className="relative z-10 flex items-center justify-center gap-3 sm:gap-6 w-full">
-                        {/* Matte Coffee Bag Mockup */}
-                        <div className="w-36 sm:w-44 bg-gradient-to-b from-[#24211d] to-[#141210] rounded-2xl p-4 border border-amber-600/40 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2">
-                          <div className="w-3 h-3 rounded-full border border-amber-500/60 mx-auto mb-2 flex items-center justify-center">
-                            <div className="w-1 h-1 bg-amber-400 rounded-full" />
-                          </div>
-                          <div className="border border-amber-500/30 bg-amber-500/5 rounded-xl p-2.5 text-center">
-                            <div className="text-[8px] font-mono tracking-widest uppercase font-bold text-amber-300">Nova Coffee</div>
-                            <div className="font-display font-bold text-xs sm:text-sm text-white mt-0.5">YIRGACHEFFE</div>
-                            <div className="text-[7px] text-amber-200/70 font-mono mt-0.5">SINGLE ORIGIN • 250G</div>
-                          </div>
-                          <div className="mt-3 pt-2 border-t border-white/10 flex justify-between text-[8px] font-mono text-neutral-400">
-                            <span>MATTE POUCH</span>
-                            <span className="text-amber-400 font-bold">VALVE</span>
-                          </div>
-                        </div>
-
-                        {/* Stamped Foil Business Cards */}
-                        <div className="w-36 sm:w-48 -ml-4 bg-gradient-to-br from-[#2f2721] to-[#1c1713] rounded-xl p-3.5 border border-amber-500/40 shadow-2xl rotate-6 transition-transform duration-500 group-hover:rotate-2 group-hover:scale-105">
-                          <div className="flex justify-between items-start">
-                            <span className="text-[8px] font-mono uppercase text-amber-400 font-bold">Duplex Cotton</span>
-                            <span className="w-4 h-4 rounded border border-amber-400/40 flex items-center justify-center text-[9px] text-amber-300 font-bold">R</span>
-                          </div>
-                          <div className="font-display font-bold text-xs text-white mt-3">700gsm Letterpress</div>
-                          <div className="text-[8px] text-amber-200/60 font-mono">Burnt Amber Edges</div>
-                        </div>
-
-                        {/* Botanical Dropper Bottle */}
-                        <div className="hidden sm:flex w-24 h-44 bg-white/10 backdrop-blur-md rounded-t-2xl rounded-b-lg border border-white/20 p-2 flex-col items-center justify-between shadow-xl -ml-2 rotate-[-4deg]">
-                          <div className="w-8 h-4 bg-[#c8a986] rounded-t -mt-4 border border-[#8a6e4d]" />
-                          <div className="text-[7px] font-mono text-center text-emerald-300">Bloom Botanic</div>
-                          <div className="text-[6px] text-neutral-400 font-mono">50 ML</div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Editorial & Print Stage */}
-                  {current.id === "print" && (
-                    <div className="relative h-64 sm:h-72 flex items-center justify-center overflow-hidden">
-                      <div className="absolute inset-0 bg-sky-500/10 rounded-xl blur-2xl pointer-events-none" />
-                      
-                      {/* Open Monograph Spread Mockup */}
-                      <div className="relative z-10 w-full max-w-md bg-[#191c24] rounded-xl border border-sky-500/30 p-5 shadow-2xl shadow-black transition-transform duration-500 group-hover:scale-[1.02]">
-                        <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-black/60 shadow-sm" />
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <div className="text-[8px] font-mono text-sky-400 uppercase tracking-wider font-bold">Monograph 03</div>
-                            <div className="font-display font-bold text-sm text-white leading-tight">THE HORIZON RESIDENCES</div>
-                            <div className="space-y-1">
-                              <div className="h-1 w-full bg-neutral-700/60 rounded" />
-                              <div className="h-1 w-4/5 bg-neutral-700/40 rounded" />
-                            </div>
-                            <div className="text-[7px] font-mono text-neutral-400 mt-2">SWISS BINDING • COPPER FOIL</div>
-                          </div>
-                          <div className="border border-sky-500/20 bg-sky-950/30 rounded p-2 text-center space-y-1">
-                            <div className="text-[7px] font-mono text-sky-300">FLOORPLAN ARCHIVE</div>
-                            <div className="h-16 border border-dashed border-sky-400/30 rounded flex items-center justify-center text-[8px] font-mono text-sky-200/80">
-                              3,840 SQ. FT. BLUEPRINT
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Web & UI/UX Stage */}
-                  {current.id === "digital" && (
-                    <div className="relative h-64 sm:h-72 flex items-center justify-center overflow-hidden">
-                      <div className="absolute inset-0 bg-[#2546FF]/15 rounded-xl blur-2xl pointer-events-none" />
-
-                      {/* Laptop Browser Mockup Frame */}
-                      <div className="relative z-10 w-full max-w-md bg-[#12141d] rounded-xl border border-[#2546FF]/40 shadow-2xl overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
-                        <div className="bg-[#0b0d13] px-3 py-1.5 border-b border-white/10 flex items-center justify-between">
-                          <div className="flex items-center gap-1">
-                            <div className="w-2 h-2 rounded-full bg-rose-500/80" />
-                            <div className="w-2 h-2 rounded-full bg-amber-500/80" />
-                            <div className="w-2 h-2 rounded-full bg-emerald-500/80" />
-                          </div>
-                          <span className="text-[8px] font-mono text-neutral-400">riddhicreativestudio.com</span>
-                          <span className="text-[8px] font-mono text-[#2546FF] font-bold">60 FPS</span>
-                        </div>
-                        <div className="p-4 space-y-3 bg-gradient-to-b from-[#151826] to-[#0c0e17]">
-                          <div className="font-display font-black text-sm sm:text-base text-white">
-                            CREATIVE STUDIO ARCHITECTURE
-                          </div>
-                          <div className="grid grid-cols-3 gap-2">
-                            <div className="bg-[#2546FF]/15 border border-[#2546FF]/30 p-2 rounded text-[7px] font-mono text-blue-200">
-                              <div>UI DESIGN</div>
-                              <div className="font-bold text-white text-[9px] mt-0.5">FIGMA 100%</div>
-                            </div>
-                            <div className="bg-white/5 border border-white/10 p-2 rounded text-[7px] font-mono text-neutral-300">
-                              <div>SPEED</div>
-                              <div className="font-bold text-emerald-400 text-[9px] mt-0.5">0.4S LOAD</div>
-                            </div>
-                            <div className="bg-white/5 border border-white/10 p-2 rounded text-[7px] font-mono text-neutral-300">
-                              <div>CODE</div>
-                              <div className="font-bold text-white text-[9px] mt-0.5">REACT 19</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Social & Campaigns Stage */}
-                  {current.id === "social" && (
-                    <div className="relative h-64 sm:h-72 flex items-center justify-center overflow-hidden">
-                      <div className="absolute inset-0 bg-red-600/15 rounded-xl blur-2xl pointer-events-none" />
-
-                      <div className="relative z-10 flex items-center justify-center gap-4">
-                        {/* Phone Screen Mockup */}
-                        <div className="w-44 sm:w-52 bg-black border-2 border-neutral-700 rounded-3xl p-2.5 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2">
-                          <div className="w-12 h-2 bg-neutral-900 rounded-full mx-auto mb-2" />
-                          <div className="bg-gradient-to-br from-red-600 via-rose-700 to-black rounded-2xl p-3 text-white">
-                            <span className="text-[7px] font-mono uppercase bg-white/20 px-1.5 py-0.5 rounded">DROP 04</span>
-                            <div className="font-display font-black text-xs sm:text-sm uppercase leading-tight mt-1">
-                              BREAK EVERY LIMIT
-                            </div>
-                            <div className="text-[8px] mt-2 flex justify-between font-mono">
-                              <span>CAMPAIGN</span>
-                              <span>+420% CTR</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Metric pill */}
-                        <div className="bg-[#1f1111] border border-red-500/30 p-3 rounded-xl shadow-xl hidden sm:block">
-                          <div className="text-[8px] font-mono text-red-400">ENGAGEMENT</div>
-                          <div className="font-display font-black text-lg text-white">12.8k</div>
-                          <div className="text-[7px] text-neutral-400">Direct Saves & Shares</div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Overlay CTA affordance on hover */}
-                  <div className="absolute inset-x-0 bottom-3 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                    <span className="px-4 py-1.5 rounded-full bg-white text-black font-display font-bold text-xs shadow-xl flex items-center gap-1.5">
-                      <span>Explore {current.title}</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </span>
-                  </div>
-
-                </div>
-
-                {/* Bottom Stage Details & Specs Strip */}
-                <div className="mt-4 pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="space-y-0.5">
-                    <div className="text-xs font-display font-bold text-white flex items-center gap-2">
-                      <span>{current.title}</span>
-                      <span className="text-[10px] font-mono text-neutral-400">• {current.badge}</span>
-                    </div>
-                    <p className="text-[11px] text-neutral-400 max-w-sm leading-normal">
-                      {current.subtitle}
-                    </p>
-                  </div>
-
-                  {/* Production specs badges */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {current.specs.map((spec, i) => (
-                      <span
-                        key={i}
-                        className="text-[9px] font-mono px-2 py-0.5 rounded bg-white/5 border border-white/10 text-neutral-300"
-                      >
-                        {spec}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Progress Line for auto-play */}
-              <div className="mt-2 h-[2px] w-full bg-white/10 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-[#2546FF] transition-all duration-300"
-                  style={{ width: `${((activeTab + 1) / heroDisciplines.length) * 100}%` }}
-                />
-              </div>
-
-            </div>
-          </div>
-
+          <div className="absolute -bottom-5 -left-4 -z-10 h-20 w-20 rounded-full bg-[#14B8A6]/20 blur-xl sm:-left-8" />
         </div>
-
       </div>
+      <div className="pointer-events-none absolute bottom-0 left-0 h-2 w-full bg-gradient-to-r from-[#2563EB] via-[#D9468D] via-55% to-[#F59E0B]" />
     </section>
+  );
+}
+
+function Field({ label, name, type = 'text', placeholder, required = false }) {
+  return (
+    <label className="block text-xs font-semibold text-[#344054]">
+      {label} {required && <span className="text-[#D9468D]" aria-hidden="true">*</span>}
+      <input name={name} type={type} placeholder={placeholder} required={required} autoComplete={name === 'business' ? 'organization' : name === 'name' ? 'name' : name} className="rps-field mt-1.5" />
+    </label>
   );
 }

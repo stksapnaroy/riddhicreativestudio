@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight, Sparkles, Phone, Mail } from 'lucide-react';
+import { Menu, X, ArrowRight, Phone, Mail } from 'lucide-react';
 import { studioInfo } from '../../data/companyData';
 
-export default function Header({ onOpenQuote, onOpenClientPortal, onOpenAdminPortal, activeSection = "home" }) {
+export default function Header({ onOpenQuote, onOpenClientPortal, onOpenAdminPortal }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on esc key or resize
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') setMobileMenuOpen(false);
@@ -25,17 +24,17 @@ export default function Header({ onOpenQuote, onOpenClientPortal, onOpenAdminPor
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "#home" },
-    { name: "Services", href: "#services" },
-    { name: "Portfolio", href: "#portfolio" },
-    { name: "About", href: "#about" },
-    { name: "Process", href: "#process" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "Services", href: "/services" },
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "About", href: "/about" },
+    { name: "Contact", href: "/contact" }
   ];
 
   const handleNavClick = (e, href) => {
-    e.preventDefault();
     setMobileMenuOpen(false);
+    if (!href.startsWith('#')) return;
+    e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
@@ -47,7 +46,7 @@ export default function Header({ onOpenQuote, onOpenClientPortal, onOpenAdminPor
       <header 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? 'py-3 bg-[#FAF9F5]/90 backdrop-blur-md shadow-sm border-b border-[#E7E5DE]' 
+            ? 'py-3.5 bg-white/92 backdrop-blur-md border-b border-slate-200/80 shadow-xs' 
             : 'py-5 bg-transparent'
         }`}
       >
@@ -56,67 +55,63 @@ export default function Header({ onOpenQuote, onOpenClientPortal, onOpenAdminPor
 
             {/* Logo */}
             <a 
-              href="#home" 
-              onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-2.5 group"
-              aria-label="Riddhi Creative Studio - Home"
+              href="/"
+              className="flex items-center gap-3 group cursor-pointer"
+              aria-label="Riddhi Print Studio - Home"
             >
-              <div className="w-9 h-9 rounded-xl bg-[#0D0E11] text-white flex items-center justify-center font-display font-black text-base shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:bg-[#2546FF]">
+              <div className="w-10 h-10 rounded-xl bg-[#2563EB] text-white flex items-center justify-center font-display font-black text-lg shadow-sm shadow-blue-500/25 transition-transform duration-300 group-hover:scale-105 group-hover:bg-[#1D4ED8]">
                 R
               </div>
               <div className="flex flex-col">
-                <span className="font-display font-extrabold text-base sm:text-lg tracking-tight text-[#0D0E11] group-hover:text-[#2546FF] transition-colors">
-                  Riddhi Creative Studio
+                <span className="font-display font-black text-base sm:text-lg tracking-tight text-[#172033] group-hover:text-[#2563EB] transition-colors">
+                  Riddhi Print Studio
                 </span>
-                <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-500 -mt-1 hidden sm:block">
-                  Print & Digital Agency
+                <span className="text-[10px] font-mono tracking-widest uppercase text-[#64748B] -mt-0.5 hidden sm:block">
+                  Design • Development • Print
                 </span>
               </div>
             </a>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1 bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#E7E5DE] shadow-sm">
+            {/* Desktop Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-1 bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-200 shadow-2xs">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="px-3.5 py-1.5 text-xs font-medium tracking-wide text-neutral-700 hover:text-[#0D0E11] hover:bg-neutral-100 rounded-full transition-all duration-200"
+                  className="px-3.5 py-1.5 text-xs font-medium tracking-wide text-[#64748B] hover:text-[#2563EB] hover:bg-[#EFF6FF] rounded-full transition-all duration-200"
                 >
                   {link.name}
                 </a>
               ))}
             </nav>
 
-            {/* Right Side: CTA Button & Mobile Hamburger */}
+            {/* Right Side: Availability, Client Portal & Primary CTA */}
             <div className="flex items-center gap-3">
-              <button
-                onClick={onOpenClientPortal}
-                className="hidden lg:inline-flex px-3 py-2 text-xs font-semibold text-neutral-700 hover:text-[#2546FF]"
-              >
-                My Portal
-              </button>
-              <button
-                onClick={onOpenAdminPortal}
-                className="hidden xl:inline-flex px-2 py-2 text-[10px] font-mono text-neutral-400 hover:text-neutral-900"
-                title="Studio admin"
-              >
-                Admin
-              </button>
+              {onOpenClientPortal && (
+                <button
+                  onClick={onOpenClientPortal}
+                  className="hidden md:inline-flex px-3 py-2 text-xs font-semibold text-[#64748B] hover:text-[#2563EB] transition-colors cursor-pointer"
+                >
+                  Client Portal
+                </button>
+              )}
+
+              {/* Primary CTA Button */}
               <button
                 onClick={onOpenQuote}
-                className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#0D0E11] text-white hover:bg-[#2546FF] shadow-sm hover:shadow-md transition-all duration-300 group"
+                className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2563EB] text-white hover:bg-[#1D4ED8] shadow-sm hover:shadow-md hover:shadow-blue-500/20 transition-all duration-300 group cursor-pointer"
               >
                 <span>Get a Quote</span>
                 <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
               </button>
 
-              {/* Mobile menu toggle */}
+              {/* Mobile menu toggle button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Toggle navigation menu"
                 aria-expanded={mobileMenuOpen}
-                className="md:hidden p-2 rounded-xl bg-white border border-[#E7E5DE] text-neutral-800 hover:text-[#2546FF] transition-colors"
+                className="lg:hidden p-2 rounded-xl bg-white border border-slate-200 text-[#172033] hover:text-[#2563EB] hover:border-[#2563EB] transition-colors cursor-pointer"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -128,33 +123,36 @@ export default function Header({ onOpenQuote, onOpenClientPortal, onOpenAdminPor
 
       {/* Mobile Navigation Drawer */}
       <div 
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-400 ${
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
         {/* Backdrop */}
         <div 
           onClick={() => setMobileMenuOpen(false)}
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+          className="absolute inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"
         />
 
         {/* Drawer Panel */}
         <div 
-          className={`absolute top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#FAF9F5] p-6 shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-out border-l border-[#E7E5DE] ${
+          className={`absolute top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white p-6 shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-out border-l border-slate-200 ${
             mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
           <div>
-            <div className="flex items-center justify-between pb-6 border-b border-[#E7E5DE]">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#0D0E11] text-white flex items-center justify-center font-display font-bold text-sm">
+            <div className="flex items-center justify-between pb-6 border-b border-slate-200">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#2563EB] text-white flex items-center justify-center font-display font-black text-sm">
                   R
                 </div>
-                <span className="font-display font-bold text-sm">Riddhi Creative Studio</span>
+                <div className="flex flex-col">
+                  <span className="font-display font-bold text-sm text-[#172033]">Riddhi Print Studio</span>
+                  <span className="text-[10px] font-mono text-[#64748B]">Design • Dev • Print</span>
+                </div>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-lg text-neutral-500 hover:text-black"
+                className="p-2 rounded-lg text-[#64748B] hover:text-[#172033]"
                 aria-label="Close menu"
               >
                 <X className="w-5 h-5" />
@@ -162,41 +160,53 @@ export default function Header({ onOpenQuote, onOpenClientPortal, onOpenAdminPor
             </div>
 
             {/* Mobile Nav Links */}
-            <div className="py-6 space-y-2">
+            <div className="py-6 space-y-1">
               {navLinks.map((link, idx) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="flex items-center justify-between px-4 py-3 rounded-xl text-base font-display font-semibold text-neutral-900 hover:bg-neutral-100 hover:text-[#2546FF] transition-colors"
+                  className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-display font-semibold text-[#172033] hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-colors"
                 >
                   <span>{link.name}</span>
-                  <span className="text-xs font-mono text-neutral-400">0{idx + 1}</span>
+                  <span className="text-[11px] font-mono text-[#64748B]">0{idx + 1}</span>
                 </a>
               ))}
             </div>
           </div>
 
           {/* Drawer Footer Actions */}
-          <div className="space-y-4 pt-4 border-t border-[#E7E5DE]">
+          <div className="space-y-4 pt-4 border-t border-slate-200">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenQuote();
               }}
-              className="w-full py-3 px-4 rounded-full bg-[#2546FF] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25"
+              className="w-full py-3.5 px-4 rounded-full bg-[#2563EB] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 hover:bg-[#1D4ED8]"
             >
-              <span>Get a Quote</span>
+              <span>Start a Project</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
-            <div className="text-xs text-neutral-500 space-y-1 font-mono">
+            {onOpenClientPortal && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenClientPortal();
+                }}
+                className="w-full py-2.5 px-4 rounded-full bg-slate-50 border border-slate-200 text-[#172033] font-semibold text-xs flex items-center justify-center gap-2 hover:bg-slate-100"
+              >
+                <span>Client Portal Access</span>
+              </button>
+            )}
+
+            <div className="text-xs text-[#64748B] space-y-1.5 font-mono pt-2">
               <div className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-neutral-400" />
+                <Mail className="w-3.5 h-3.5 text-[#2563EB]" />
                 <span>{studioInfo.email}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-neutral-400" />
+                <Phone className="w-3.5 h-3.5 text-[#2563EB]" />
                 <span>{studioInfo.phone}</span>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, ArrowRight, Sparkles, CheckCircle2, Calendar, Clock, Layers, Award } from 'lucide-react';
+import { X, ArrowRight, Sparkles, CheckCircle2, Calendar, Clock, Layers } from 'lucide-react';
 import MockupVisual from '../ui/MockupVisual';
 
 export default function ProjectModal({ project, isOpen, onClose, onStartProject }) {
@@ -35,28 +35,31 @@ export default function ProjectModal({ project, isOpen, onClose, onStartProject 
       {/* Backdrop with rich blur */}
       <div 
         onClick={onClose}
-        className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity animate-in fade-in duration-300"
+        className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity animate-in fade-in duration-300"
       />
 
       {/* Modal Container */}
       <div className="relative min-h-screen px-4 py-8 sm:py-14 flex items-center justify-center pointer-events-none">
         
-        <div className="relative w-full max-w-4xl bg-[#FAF9F5] rounded-2xl shadow-2xl border border-neutral-700/30 overflow-hidden pointer-events-auto">
+        <div className="relative w-full max-w-4xl bg-[#FFFFFF] rounded-3xl shadow-2xl border border-white/10 overflow-hidden pointer-events-auto text-[#172033]">
 
           {/* Sticky Modal Top Bar */}
-          <div className="sticky top-0 z-30 px-6 py-4 bg-[#FAF9F5]/95 backdrop-blur-md border-b border-[#E7E5DE] flex items-center justify-between">
+          <div className="sticky top-0 z-30 px-6 py-4 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-[#2546FF] text-white font-bold">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-[#2563EB] text-[#F8FAFC] font-bold">
                 {project.category}
               </span>
-              <span className="text-xs font-mono text-neutral-500 hidden sm:inline">
+              <span className="text-xs font-mono text-[#64748B] hidden sm:inline">
                 {project.timeline} Duration • {project.year}
+              </span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-[#64748B] border border-white/10 hidden md:inline">
+                Studio Concept
               </span>
             </div>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-full hover:bg-neutral-200 text-neutral-700 hover:text-black transition-colors"
+              className="p-2 rounded-full hover:bg-white/10 text-[#64748B] hover:text-[#172033] transition-colors cursor-pointer"
               aria-label="Close case study modal"
             >
               <X className="w-5 h-5" />
@@ -68,16 +71,16 @@ export default function ProjectModal({ project, isOpen, onClose, onStartProject 
 
             {/* Title & Tagline */}
             <div className="space-y-3">
-              <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-[#0D0E11] tracking-tight leading-tight">
+              <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-[#172033] tracking-tight leading-tight">
                 {project.title}
               </h2>
-              <p className="text-base sm:text-xl text-neutral-600 font-normal leading-relaxed">
+              <p className="text-base sm:text-xl text-[#64748B] font-normal leading-relaxed">
                 {project.tagline}
               </p>
             </div>
 
             {/* Hero Mockup Visual */}
-            <div className="rounded-xl overflow-hidden shadow-xl border border-neutral-300">
+            <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#F8FAFC]">
               <MockupVisual
                 type={project.mockupType}
                 title={project.title}
@@ -88,143 +91,80 @@ export default function ProjectModal({ project, isOpen, onClose, onStartProject 
             </div>
 
             {/* Project Quick Meta Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-xl bg-[#F3F2EC] border border-[#E7E5DE]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-2xl bg-[#F8FAFC] border border-white/10 text-xs font-mono">
               <div>
-                <div className="text-[10px] font-mono uppercase text-neutral-500">Client / Showcase</div>
-                <div className="text-xs font-bold text-neutral-900 mt-0.5 truncate">{project.client}</div>
+                <div className="text-[10px] uppercase text-[#64748B]">Project Type</div>
+                <div className="font-bold text-[#172033] mt-0.5 truncate">{project.client}</div>
               </div>
               <div>
-                <div className="text-[10px] font-mono uppercase text-neutral-500">Discipline</div>
-                <div className="text-xs font-bold text-[#2546FF] mt-0.5">{project.category}</div>
+                <div className="text-[10px] uppercase text-[#64748B]">Primary Discipline</div>
+                <div className="font-bold text-[#2563EB] mt-0.5">{project.category}</div>
               </div>
               <div>
-                <div className="text-[10px] font-mono uppercase text-neutral-500">Timeline</div>
-                <div className="text-xs font-bold text-neutral-900 mt-0.5">{project.timeline}</div>
+                <div className="text-[10px] uppercase text-[#64748B]">Timeline</div>
+                <div className="font-bold text-[#172033] mt-0.5">{project.timeline}</div>
               </div>
               <div>
-                <div className="text-[10px] font-mono uppercase text-neutral-500">Year Completed</div>
-                <div className="text-xs font-bold text-neutral-900 mt-0.5">{project.year}</div>
+                <div className="text-[10px] uppercase text-[#64748B]">Year</div>
+                <div className="font-bold text-[#172033] mt-0.5">{project.year}</div>
               </div>
             </div>
 
-            {/* Case Study Core Editorial Breakdown */}
-            <div className="space-y-8 divide-y divide-[#E7E5DE]">
-
-              {/* 1. Overview */}
-              <div className="pt-6 space-y-2">
-                <h3 className="font-display font-bold text-lg text-[#0D0E11] flex items-center gap-2">
-                  <span className="font-mono text-xs text-[#2546FF]">01</span>
-                  Project Overview
-                </h3>
-                <p className="text-sm sm:text-base text-neutral-700 leading-relaxed">
-                  {project.overview}
-                </p>
-              </div>
-
-              {/* 2. The Challenge */}
-              <div className="pt-6 space-y-2">
-                <h3 className="font-display font-bold text-lg text-[#0D0E11] flex items-center gap-2">
-                  <span className="font-mono text-xs text-[#2546FF]">02</span>
-                  The Challenge
-                </h3>
-                <p className="text-sm sm:text-base text-neutral-700 leading-relaxed">
+            {/* Project Deep Dive 2-Col Split */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+                  The Creative Challenge
+                </h4>
+                <p className="text-sm text-[#64748B] leading-relaxed">
                   {project.challenge}
                 </p>
               </div>
 
-              {/* 3. Creative Direction */}
-              <div className="pt-6 space-y-2">
-                <h3 className="font-display font-bold text-lg text-[#0D0E11] flex items-center gap-2">
-                  <span className="font-mono text-xs text-[#2546FF]">03</span>
-                  Creative Direction
-                </h3>
-                <p className="text-sm sm:text-base text-neutral-700 leading-relaxed">
-                  {project.creativeDirection}
-                </p>
-              </div>
-
-              {/* 4. Design Solution */}
-              <div className="pt-6 space-y-2">
-                <h3 className="font-display font-bold text-lg text-[#0D0E11] flex items-center gap-2">
-                  <span className="font-mono text-xs text-[#2546FF]">04</span>
-                  Design Solution
-                </h3>
-                <p className="text-sm sm:text-base text-neutral-700 leading-relaxed">
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+                  The Studio Solution
+                </h4>
+                <p className="text-sm text-[#64748B] leading-relaxed">
                   {project.designSolution}
                 </p>
               </div>
-
-              {/* 5. Final Result */}
-              <div className="pt-6 space-y-2">
-                <h3 className="font-display font-bold text-lg text-[#0D0E11] flex items-center gap-2">
-                  <span className="font-mono text-xs text-[#2546FF]">05</span>
-                  Final Result & Impact
-                </h3>
-                <div className="p-4 rounded-xl bg-white border border-[#E7E5DE] text-sm text-neutral-800 leading-relaxed font-medium">
-                  {project.finalResult}
-                </div>
-              </div>
-
             </div>
 
-            {/* Visual Gallery Deliverables */}
-            {project.gallery && project.gallery.length > 0 && (
-              <div className="space-y-4 pt-4 border-t border-[#E7E5DE]">
-                <h3 className="font-display font-bold text-lg text-[#0D0E11]">
-                  Deliverable Highlights
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {project.gallery.map((item, idx) => (
-                    <div 
-                      key={idx} 
-                      className="p-4 rounded-xl bg-white border border-[#E7E5DE] space-y-2"
-                    >
-                      <div className="flex items-center gap-2 text-xs font-bold text-neutral-900 font-display">
-                        <CheckCircle2 className="w-4 h-4 text-[#2546FF]" />
-                        <span>{item.title}</span>
-                      </div>
-                      <p className="text-xs text-neutral-600 leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Services Delivered Tag Pills */}
-            <div className="space-y-3 pt-4 border-t border-[#E7E5DE]">
-              <div className="text-xs font-mono uppercase tracking-wider text-neutral-500 font-semibold">
-                Services Provided in this Case Study
-              </div>
-              <div className="flex flex-wrap gap-2">
+            {/* Deliverables / Scope list */}
+            <div className="pt-6 border-t border-white/10">
+              <h4 className="text-xs font-mono uppercase tracking-widest text-[#64748B] font-bold mb-4">
+                Services & Deliverables Provided
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {project.services.map((srv, idx) => (
-                  <span
+                  <div 
                     key={idx}
-                    className="text-xs font-medium px-3 py-1 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200"
+                    className="p-3 rounded-xl bg-[#F8FAFC] border border-white/10 flex items-center gap-2.5 text-xs text-neutral-200"
                   >
-                    {srv}
-                  </span>
+                    <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+                    <span>{srv}</span>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Bottom Call to Action Box */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-[#0D0E11] text-white space-y-4 flex flex-col sm:flex-row items-center justify-between gap-6">
+            {/* Bottom Action Footer */}
+            <div className="p-6 rounded-2xl bg-[#F8FAFC] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="space-y-1 text-center sm:text-left">
-                <div className="font-display font-bold text-xl text-white">
-                  Need something similar for your brand?
+                <div className="font-display font-bold text-base text-[#172033]">
+                  Inspired by this design concept?
                 </div>
-                <div className="text-xs sm:text-sm text-neutral-400">
-                  Let's bring this level of craft, typography, and execution to your business.
+                <div className="text-xs text-[#64748B]">
+                  We can tailor a similar digital or print solution for your brand.
                 </div>
               </div>
 
               <button
                 onClick={handleStartSimilar}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-[#2546FF] hover:bg-[#1837E8] text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-xl shadow-blue-500/25 flex items-center justify-center gap-2 whitespace-nowrap"
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-[#F8FAFC] font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer whitespace-nowrap"
               >
-                <span>Start Your Project</span>
+                <span>Start a Project Like This</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
